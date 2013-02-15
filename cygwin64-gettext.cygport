@@ -1,0 +1,80 @@
+CROSS_HOST="x86_64-pc-cygwin"
+inherit cross
+
+NAME="cygwin64-gettext"
+VERSION=0.18.1.1
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="GNU Gettext for Cygwin 64bit toolchain"
+DESCRIPTION=
+HOMEPAGE="http://www.gnu.org/software/gettext/"
+SRC_URI="http://ftp.gnu.org/pub/gnu/gettext/gettext-${VERSION}.tar.gz"
+SRC_DIR="gettext-${VERSION}"
+
+DIFF_EXCLUDES="Makefile.in aclocal.m4 compile config.* configure depcomp libtool.m4 lt*.m4 ltmain.sh missing"
+DISTCLEANFILES="m4/libtool.m4 gettext-tools/gnulib-m4/openmp.m4"
+
+src_compile() {
+	cd ${S}
+	touch m4/libtool.m4 gettext-tools/gnulib-m4/openmp.m4
+	libtoolize --copy --force
+	./autogen.sh --quick --skip-gnulib
+	cd ${B}
+	cygconf --enable-static \
+		--disable-java --disable-native-java --disable-csharp \
+		--enable-threads=posix \
+		--without-emacs \
+		--with-included-glib \
+		--with-included-libcroco \
+		--with-included-libunistring \
+		--with-included-libxml \
+		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
+		am_cv_func_iconv_works=yes \
+		gl_cv_cc_visibility=no \
+		gl_cv_header_working_fcntl_h=yes \
+		gl_cv_func_btowc_eof=yes \
+		gl_cv_func_btowc_nul=yes \
+		gl_cv_func_dup2_works=yes \
+		gl_cv_func_fcntl_f_dupfd_works=yes \
+		gl_cv_func_fnmatch_posix=yes \
+		gl_cv_func_fopen_slash=yes \
+		gl_cv_func_working_getdelim=yes \
+		gl_cv_func_getopt_posix=yes \
+		gl_cv_func_gettimeofday_clobber=no \
+		gl_cv_func_mbrtowc_incomplete_state=yes \
+		gl_cv_func_mbrtowc_null_arg=yes \
+		gl_cv_func_mbrtowc_retval=yes \
+		gl_cv_func_mbsrtowcs_works=yes \
+		gl_cv_func_memchr_works=yes \
+		gl_cv_func_open_slash=yes \
+		gl_cv_func_readlink_works=yes \
+		gl_cv_func_rmdir_works=yes \
+		gt_cv_func_printf_posix=yes \
+		gl_cv_func_setenv_works=yes \
+		gl_cv_func_snprintf_retval_c99=yes \
+		gl_cv_func_snprintf_size1=yes \
+		gl_cv_func_stat_dir_slash=yes \
+		gl_cv_func_stat_file_slash=yes \
+		gl_cv_func_stpncpy=yes \
+		gl_cv_func_strstr_linear=yes \
+		gl_cv_func_svid_putenv=yes \
+		gl_cv_func_symlink_works=yes \
+		gl_cv_func_unsetenv_works=yes \
+		gl_cv_func_wcrtomb_retval=yes \
+		gl_cv_func_wctob_works=yes \
+		gl_cv_func_wcwidth_works=yes \
+		gl_cv_have_weak=no \
+		gt_cv_int_divbyzero_sigfpe=yes
+
+	cd ${B}/gettext-runtime
+	cygmake
+}
+
+src_install() {
+	cd ${B}/gettext-runtime
+	cyginstall
+	rm -fr ${D}/usr/share/doc/${NAME}/*
+	rm -fr ${D}${CROSS_DATADIR}/{info,man,locale}/
+}
+
+KEEP_LA_FILES="none"
