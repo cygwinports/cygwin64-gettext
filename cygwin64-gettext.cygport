@@ -3,13 +3,20 @@ inherit cross
 
 NAME="cygwin64-gettext"
 VERSION=0.18.1.1
-RELEASE=1
+RELEASE=2
 CATEGORY="Devel"
 SUMMARY="GNU Gettext for Cygwin 64bit toolchain"
 DESCRIPTION=
 HOMEPAGE="http://www.gnu.org/software/gettext/"
 SRC_URI="http://ftp.gnu.org/pub/gnu/gettext/gettext-${VERSION}.tar.gz"
 SRC_DIR="gettext-${VERSION}"
+
+PATCH_URI="
+	gettext-0.18.1.1-autopoint-V.patch
+	gettext-0.18.1.1-cygwin-error_h.patch
+	gettext-0.18.1.1-locale.patch
+	gettext-0.18.1.1-reloc.patch
+"
 
 DIFF_EXCLUDES="Makefile.in aclocal.m4 compile config.* configure depcomp libtool.m4 lt*.m4 ltmain.sh missing"
 DISTCLEANFILES="m4/libtool.m4 gettext-tools/gnulib-m4/openmp.m4"
@@ -74,6 +81,7 @@ src_install() {
 	cd ${B}/gettext-runtime
 	cyginstall
 	rm -fr ${D}/usr/share/doc/${NAME}/*
+	rm -f ${D}${CROSS_BINDIR}/*.{exe,sh}
 	rm -fr ${D}${CROSS_DATADIR}/{info,man,locale}/
 }
 
