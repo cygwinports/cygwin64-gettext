@@ -3,7 +3,7 @@ inherit cross
 
 NAME="cygwin64-gettext"
 VERSION=0.18.1.1
-RELEASE=2
+RELEASE=3
 CATEGORY="Devel"
 SUMMARY="GNU Gettext for Cygwin 64bit toolchain"
 DESCRIPTION=
