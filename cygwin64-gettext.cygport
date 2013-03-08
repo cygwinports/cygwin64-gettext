@@ -15,6 +15,7 @@ PATCH_URI="
 	gettext-0.18.1.1-autopoint-V.patch
 	gettext-0.18.1.1-cygwin-error_h.patch
 	gettext-0.18.1.1-locale.patch
+	gettext-0.18.1.1-no-woe32dll.patch
 	gettext-0.18.1.1-reloc.patch
 "
 
@@ -35,6 +36,7 @@ src_compile() {
 		--with-included-libcroco \
 		--with-included-libunistring \
 		--with-included-libxml \
+		--without-libiconv-prefix \
 		ac_cv_func_lstat_dereferences_slashed_symlink=yes \
 		am_cv_func_iconv_works=yes \
 		gl_cv_cc_visibility=no \
@@ -73,16 +75,19 @@ src_compile() {
 		gl_cv_have_weak=no \
 		gt_cv_int_divbyzero_sigfpe=yes
 
-	cd ${B}/gettext-runtime
 	cygmake
 }
 
 src_install() {
-	cd ${B}/gettext-runtime
+	cd ${B}
 	cyginstall
 	rm -fr ${D}/usr/share/doc/${NAME}/*
 	rm -f ${D}${CROSS_BINDIR}/*.{exe,sh}
-	rm -fr ${D}${CROSS_DATADIR}/{info,man,locale}/
+	rm -f ${D}${CROSS_LIBDIR}/cyggettext{lib,src}-*
+	rm -f ${D}${CROSS_BINDIR}/{autopoint,gettextize}
+	rm -fr ${D}${CROSS_LIBDIR}/gettext/
+	rm -f ${D}${CROSS_LIBDIR}/libgettext{lib,src}.*
+	rm -fr ${D}${CROSS_DATADIR}/
 }
 
 KEEP_LA_FILES="none"
