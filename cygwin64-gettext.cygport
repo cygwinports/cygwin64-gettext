@@ -83,7 +83,7 @@ src_install() {
 	cyginstall
 	rm -fr ${D}/usr/share/doc/${NAME}/*
 	rm -f ${D}${CROSS_BINDIR}/*.{exe,sh}
-	rm -f ${D}${CROSS_LIBDIR}/cyggettext{lib,src}-*
+	rm -f ${D}${CROSS_BINDIR}/cyggettext{lib,src}-*
 	rm -f ${D}${CROSS_BINDIR}/{autopoint,gettextize}
 	rm -fr ${D}${CROSS_LIBDIR}/gettext/
 	rm -f ${D}${CROSS_LIBDIR}/libgettext{lib,src}.*
