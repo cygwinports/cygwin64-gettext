@@ -2,31 +2,31 @@ CROSS_HOST="x86_64-pc-cygwin"
 inherit cross
 
 NAME="cygwin64-gettext"
-VERSION=0.18.1.1
-RELEASE=3
+VERSION=0.19.5.1
+RELEASE=1
 CATEGORY="Devel"
 SUMMARY="GNU Gettext for Cygwin 64bit toolchain"
-DESCRIPTION=
+DESCRIPTION="Gettext provides an easy to use library and tools for creating,
+using, and modifying natural language catalogs and is a powerful and simple
+method for internationalizing programs."
 HOMEPAGE="http://www.gnu.org/software/gettext/"
 SRC_URI="http://ftp.gnu.org/pub/gnu/gettext/gettext-${VERSION}.tar.gz"
 SRC_DIR="gettext-${VERSION}"
 
 PATCH_URI="
 	gettext-0.18.1.1-autopoint-V.patch
-	gettext-0.18.1.1-cygwin-error_h.patch
-	gettext-0.18.1.1-locale.patch
+	gettext-0.19.3-localename.patch
 	gettext-0.18.1.1-no-woe32dll.patch
-	gettext-0.18.1.1-reloc.patch
 "
 
-DIFF_EXCLUDES="Makefile.in aclocal.m4 compile config.* configure depcomp libtool.m4 lt*.m4 ltmain.sh missing"
+DIFF_EXCLUDES="Makefile.in aclocal.m4 compile config.* configure depcomp libtool.m4 lt*.m4 ltmain.sh missing intl.m4 po.m4"
 DISTCLEANFILES="m4/libtool.m4 gettext-tools/gnulib-m4/openmp.m4"
 
 src_compile() {
 	cd ${S}
 	touch m4/libtool.m4 gettext-tools/gnulib-m4/openmp.m4
 	libtoolize --copy --force
-	./autogen.sh --quick --skip-gnulib
+	./autogen.sh --skip-gnulib
 	cd ${B}
 	cygconf --enable-static \
 		--disable-java --disable-native-java --disable-csharp \
